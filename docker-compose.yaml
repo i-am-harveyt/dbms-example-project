@@ -1,17 +1,18 @@
 services:
-  mysql:
+  dbms_ec_mysql:
     image: mysql:lts
     restart: always
     ports:
-      - "3306:3306"
+      - "3306:3306"  # port forwarding
     environment:
       MYSQL_ROOT_PASSWORD: 53cr3t
       MYSQL_USER: dbms-example
       MYSQL_PASSWORD: dbms-example
       MYSQL_DATABASE: dbms-example
     volumes:
-      - mysql:/var/lib/mysql
+      - example_ec_mysql_volume:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d  # use file in ./db as init files
 
 volumes:
-  mysql:
+  example_ec_mysql_volume:
 
