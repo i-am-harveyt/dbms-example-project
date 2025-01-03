@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:lts
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 53cr3t
+      MYSQL_USER: dbms-example
+      MYSQL_PASSWORD: dbms-example
+      MYSQL_DATABASE: dbms-example
+    volumes:
+      - mysql:/var/lib/mysql
+
+volumes:
+  mysql:
+
