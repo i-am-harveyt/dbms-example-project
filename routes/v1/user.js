@@ -1,6 +1,7 @@
 import express, { Router } from "express";
 import mysqlConnectionPool from "../../lib/mysql.js";
-import { OK, CREATED, BAD_REQUEST } from "../../lib/constants.js";
+import { signJWT } from "../../lib/jwt.js";
+import { StatusCode } from "../../lib/constants.js";
 
 const userRouter = Router();
 
@@ -31,12 +32,14 @@ async function signup(req, res) {
   const mysql = await mysqlConnectionPool.getConnection();
   try {
     await mysql.query(
-      "INSERT INTO User (Id, Name, Account, Password) VALUES (?, ?, ?, ?)",
+      `
+		INSERT INTO \`User\` (Id, Name, Account, Password)
+		VALUES (?, ?, ?, ?)`,
       [id, name, account, password],
     );
-    res.status(CREATED).json({ status: "ok" });
+    res.status(StatusCode.CREATED).json({ status: "ok" });
   } catch (err) {
-    res.status(BAD_REQUEST).json({ error: err });
+    res.status(StatusCode.BAD_REQUEST).json({ error: err });
   }
 }
 userRouter.post("/signup", signup);
@@ -52,13 +55,21 @@ async function login(req, res) {
   /* Again, the password should encrypted / hashed, I skip that part here */
   const mysql = await mysqlConnectionPool.getConnection();
   try {
-    const [results, fields] = await mysql.query(
-      "SELECT Id, Name, Account FROM `User` WHERE Account=? AND Password=?",
+    const [results] = await mysql.query(
+      `
+		SELECT Id, Name, Account FROM \`User\`
+		WHERE
+		Account=CONVERT(? USING utf8mb4) AND
+		Password=CONVERT(? USING utf8mb4)
+		COLLATE utf8mb4_bin`,
       [account, password],
     );
-    res.status(OK).json(results[0]);
+    res.status(StatusCode.OK).json({
+      id: results[0],
+      token: await signJWT({ id: results[0] }),
+    });
   } catch (err) {
-    res.status(BAD_REQUEST).json({ error: err });
+    res.status(StatusCode.BAD_REQUEST).json({ error: err });
   }
 }
 userRouter.post("/login", login);
