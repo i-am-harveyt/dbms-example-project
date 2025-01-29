@@ -1,5 +1,5 @@
 services:
-  dbms_ec_mysql:
+  dbms_mysql:
     image: mysql:lts
     restart: always
     ports:
@@ -10,9 +10,9 @@ services:
       MYSQL_PASSWORD: dbms-example
       MYSQL_DATABASE: dbms-example
     volumes:
-      - example_ec_mysql_volume:/var/lib/mysql
+      - dbms_mysql:/var/lib/mysql
       - ./db:/docker-entrypoint-initdb.d  # use file in ./db as init files
 
 volumes:
-  example_ec_mysql_volume:
+  dbms_mysql:
 
