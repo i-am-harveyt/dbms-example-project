@@ -4,21 +4,7 @@ import { signJWT } from "../../lib/jwt.js";
 import { StatusCode } from "../../lib/constants.js";
 
 const userRouter = Router();
-
-/**
- * Get user information from the MySQL database.
- *
- * @param {express.Request} req
- * @param {express.Response} res
- */
-async function getUser(req, res) {
-  const mysql = await mysqlConnectionPool.getConnection();
-  const [results, fields] = await mysql.query();
-  res.json({
-    message: `Hello user ${results[0]["id"]}`,
-  });
-}
-userRouter.get("/:id", getUser);
+export default userRouter;
 
 /**
  * Signup with `id`, `name`, `account` and `password` in request body.
@@ -39,7 +25,9 @@ async function signup(req, res) {
     );
     res.status(StatusCode.CREATED).json({ status: "ok" });
   } catch (err) {
-    res.status(StatusCode.BAD_REQUEST).json({ error: err });
+    res
+      .status(StatusCode.BAD_REQUEST)
+      .json({ error: "User account has been used!" });
   }
 }
 userRouter.post("/signup", signup);
@@ -64,14 +52,28 @@ async function login(req, res) {
 		COLLATE utf8mb4_bin`,
       [account, password],
     );
+    if (results.length === 0) throw new Error("Wrong account or password!");
     res.status(StatusCode.OK).json({
       id: results[0],
       token: await signJWT({ id: results[0] }),
     });
   } catch (err) {
-    res.status(StatusCode.BAD_REQUEST).json({ error: err });
+    res.status(StatusCode.BAD_REQUEST).json({ error: err.toStrig() });
   }
 }
 userRouter.post("/login", login);
 
-export default userRouter;
+/**
+ * Get user information from the MySQL database.
+ *
+ * @param {express.Request} req
+ * @param {express.Response} res
+ */
+async function getUser(req, res) {
+  const mysql = await mysqlConnectionPool.getConnection();
+  const [results, fields] = await mysql.query();
+  res.json({
+    message: `Hello user ${results[0]["id"]}`,
+  });
+}
+userRouter.get("/:id", getUser);
