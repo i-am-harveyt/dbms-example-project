@@ -26,5 +26,5 @@ CREATE TABLE IF NOT EXISTS `Coupon` (
 	UploadedBy INT,
 	Archived BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY(CouponId),
-	FOREIGN KEY (UploadBy) REFERENCES User.UserId
+	CONSTRAINT FK_UploadedBy FOREIGN KEY (UploadedBy) REFERENCES `User`(UserId)
 );
