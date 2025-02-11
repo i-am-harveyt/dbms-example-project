@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `User` (
 	Password VARCHAR(255) NOT NULL,
 	JoinDate TIMESTAMP NOT NULL DEFAULT NOW(),
 	CONSTRAINT UC_Email UNIQUE(Email),
-	PRIMARY KEY(Id)
+	PRIMARY KEY(UserId)
 );
 
 CREATE TABLE IF NOT EXISTS `Coupon` (
@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS `Coupon` (
 	DiscountNum DECIMAL(10, 2) NOT NULL,
 	DiscountType ENUM('percent', 'amount') NOT NULL,
 	UploadDate TIMESTAMP DEFAULT NOW(),
-	UploadedBy INT;
+	UploadedBy INT,
 	Archived BOOLEAN DEFAULT FALSE,
 	PRIMARY KEY(CouponId),
-	FOREIGN KEY (UploadBy) REFERENCES `User`.UserId
+	FOREIGN KEY (UploadBy) REFERENCES User.UserId
 );
