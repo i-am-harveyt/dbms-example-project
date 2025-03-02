@@ -38,16 +38,14 @@ userRouter.post("/signup", signup);
  */
 async function login(req, res) {
   const { email, password } = req.body;
-  /* Again, the password should encrypted / hashed, I skip that part here */
   const mysql = await mysqlConnectionPool.getConnection();
   try {
     const [results] = await mysql.query(
       `
 		SELECT UserId, Name, Email FROM \`User\`
 		WHERE
-		Email=CONVERT(? USING utf8mb4) AND
-		Password=CONVERT(? USING utf8mb4)
-		COLLATE utf8mb4_bin`,
+		Email=? AND Password=?
+		`,
       [email, password],
     );
     if (results.length === 0) throw new Error("Wrong account or password!");
