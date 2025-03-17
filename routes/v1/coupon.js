@@ -129,10 +129,19 @@ function genQueryParams(keyword, brand, location, archived, since) {
 	SELECT
 		CouponId,
 		Title,
+		Description,
+		Brand,
+		Location,
 		DiscountStart,
 		DiscountEnd,
-		Archived
-	FROM \`Coupon\`
+		Currency,
+		DiscountNum,
+		DiscountType,
+		UploadDate,
+		UploadedBy,
+		u.Name
+	FROM \`Coupon\` c
+	INNER JOIN \`User\` u ON c.UploadedBy=u.UserId
 	WHERE
 	`;
   let filters = [];
