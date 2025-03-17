@@ -1,3 +1,4 @@
+SET NAMES 'utf8mb4'; -- set encoding
 CREATE DATABASE IF NOT EXISTS `dbms-example`;
 USE `dbms-example`;
 
