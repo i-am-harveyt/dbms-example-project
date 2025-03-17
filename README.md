@@ -25,7 +25,7 @@ $ cd dbms-example-project
 
 ### (Optional) Step 2: Database Setup
 
-1. I put the sql commands to initialize the MySQL database in `db/init.sql`. Paste them into your mysql client, and run.
+1. Run SQL statements in `db/init.sql`. Paste them into your mysql client(e.g. tableplus), and run.
 2. Goto `lib/constants.js`, update the properties in `MySQL` to fit in your dev env.
 
 ### Step 3: Install Dependencies

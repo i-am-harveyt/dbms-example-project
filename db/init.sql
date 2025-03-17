@@ -28,3 +28,16 @@ CREATE TABLE IF NOT EXISTS `Coupon` (
 	PRIMARY KEY(CouponId),
 	CONSTRAINT FK_UploadedBy FOREIGN KEY (UploadedBy) REFERENCES `User`(UserId)
 );
+
+INSERT INTO `User` (UserId, Email, Name, Password, JoinDate) 
+VALUES 
+(1, 'mavis123@gmail.com', 'Mavis', 'MavisPass2024!', NOW()),
+(2, 'harvey_99@yahoo.com', 'Harvey', 'HarveySecure99', NOW()),
+(3, 'eric.wang@outlook.com', 'Eric', 'EricStrongPwd', NOW()),
+(4, 'hsiu.wei.tw@gmail.com', 'Hsiu Wei', 'WeiSuperSafe123', NOW());
+
+INSERT INTO Coupon (CouponId, Title, Description, Brand, Location, DiscountStart, DiscountEnd, Currency, DiscountNum, DiscountType, UploadDate, UploadedBy, Archived) 
+VALUES 
+(1, '50% Off Coffee', 'Get 50% off on any coffee purchase.', 'Starbucks', 'Vienna, Austria', '2025-03-15 08:00:00', '2025-03-31 23:59:59', 'EUR', 50.00, 'percent', NOW(), 1, FALSE),
+(2, '€10 Off Electronics', 'Save €10 on purchases over €100.', 'MediaMarkt', 'Berlin, Germany', '2025-04-01 00:00:00', '2025-04-15 23:59:59', 'EUR', 10.00, 'amount', NOW(), 1, FALSE),
+(3, 'Buy 1 Get 1 Free Pizza', 'Order any pizza and get another one free.', 'Domino’s', 'Paris, France', '2025-03-20 12:00:00', '2025-03-25 22:00:00', NULL, 100.00, 'percent', NOW(), 1, FALSE);
